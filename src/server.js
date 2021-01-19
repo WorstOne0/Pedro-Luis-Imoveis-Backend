@@ -23,6 +23,8 @@ const startServer = async () => {
     useUnifiedTopology: true,
   });
 
+  require("./init.js")();
+
   const app = express();
   app.use(cookieParser());
   app.use(
