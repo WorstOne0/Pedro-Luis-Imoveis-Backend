@@ -121,5 +121,7 @@ module.exports = gql`
       imagens: [ImageInput!]
       thumbnail: ImageInput!
     ): Post
+
+    testUpload(file: Upload!): Boolean!
   }
 `;

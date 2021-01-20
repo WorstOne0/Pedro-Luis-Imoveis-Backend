@@ -7,6 +7,8 @@ const { createToken } = require("../jwt");
 const User = require("../models/User");
 const Post = require("../models/Post");
 
+const fs = require("fs");
+
 module.exports = {
   Query: {
     users: () => User.find(),
@@ -158,6 +160,24 @@ module.exports = {
       res.clearCookie("accessToken");
 
       return true;
+    },
+
+    testUpload: async (_, { file }, { req, res }) => {
+      const { createReadStream, mimetype, encoding, filename } = await file;
+      let path = "uploads/" + filename;
+      let stream = createReadStream();
+
+      return new Promise((resolve, reject) => {
+        stream
+          .pipe(fs.createWriteStream(path))
+          .on("finish", () => {
+            resolve(true);
+          })
+          .on("error", (err) => {
+            console.log("Error Event Emitted");
+            reject(false);
+          });
+      });
     },
   },
 
