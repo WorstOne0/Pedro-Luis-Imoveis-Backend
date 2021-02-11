@@ -1,19 +1,10 @@
 const { ApolloError, ValidationError } = require("apollo-server-express");
-const AWS = require("aws-sdk");
 const fs = require("fs");
 
 require("dotenv").config();
 
 const User = require("../models/User");
 const Post = require("../models/Post");
-
-const s3 = new AWS.S3({
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
-  },
-  region: process.env.AWS_S3_REGION,
-});
 
 module.exports = {
   Query: {

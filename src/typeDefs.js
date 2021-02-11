@@ -43,9 +43,9 @@ module.exports = gql`
   input InfoInput {
     area: Int!
     sale: String!
-    room: String!
-    suite: String!
-    garage: String!
+    room: Int!
+    suite: Int!
+    garage: Int!
     spotlight: Boolean!
   }
 
@@ -71,14 +71,14 @@ module.exports = gql`
     name: String!
     key: String!
     url: String!
-    size: Int!
+    size: String!
   }
 
   input ImageInput {
     name: String!
     key: String!
     url: String!
-    size: Int!
+    size: String!
   }
 
   type Query {
