@@ -81,12 +81,29 @@ module.exports = gql`
     size: String!
   }
 
+  input Search {
+    typeSelected: String
+    citySelected: String
+    realStateSelected: String
+    districtSelected: [String!]
+    sort: String
+    spotlight: Boolean
+    price: MinMax
+    area: MinMax
+  }
+
+  input MinMax {
+    min: Int
+    max: Int
+  }
+
   type Query {
     users: [User!]
     getUser(userId: ID!): User
     getLoggedUser: User
 
-    posts: [Post!]!
+    posts: [Post!]
+    searchPost(query: Search): [Post!]
     getPost(postId: ID!): Post
   }
 

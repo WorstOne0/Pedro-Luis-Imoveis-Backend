@@ -9,6 +9,32 @@ const Post = require("../models/Post");
 module.exports = {
   Query: {
     posts: () => Post.find(),
+    searchPost: async (_, { query }, { req }) => {
+      /**{
+          type:
+            query.realStateSelected == null
+              ? { $exists: true }
+              : query.realStateSelected,
+          "info.sale":
+            query.typeSelected == null ? { $exists: true } : query.typeSelected,
+          "address.city":
+            query.citySelected == null ? { $exists: true } : query.citySelected,
+          "address.district":
+            query.districtSelected.length === 0
+              ? { $exists: true }
+              : { $in: query.districtSelected },
+          price: { $gte: query.price.min, $lte: query.price.max },
+          "info.area": { $gte: query.area.min, $lte: query.area.max },
+          "info.spotlight": query.spotlight
+            ? query.spotlight
+            : { $exists: true },
+        } */
+      try {
+        return Post.find();
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
     getPost: (_, { postId }) => {
       return Post.findOne({ _id: postId });
     },
