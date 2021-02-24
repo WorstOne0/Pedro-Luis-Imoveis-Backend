@@ -10,7 +10,10 @@ module.exports = {
   Query: {
     posts: () => Post.find(),
     searchPost: async (_, { query }, { req }) => {
-      /**{
+      if (query.districtSelected === null) query.districtSelected = [];
+
+      try {
+        return Post.find({
           type:
             query.realStateSelected == null
               ? { $exists: true }
@@ -28,9 +31,7 @@ module.exports = {
           "info.spotlight": query.spotlight
             ? query.spotlight
             : { $exists: true },
-        } */
-      try {
-        return Post.find();
+        });
       } catch (error) {
         throw new ApolloError(error);
       }
