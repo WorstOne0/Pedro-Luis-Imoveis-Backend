@@ -71,14 +71,12 @@ module.exports = gql`
     name: String!
     key: String!
     url: String!
-    size: String!
   }
 
   input ImageInput {
     name: String!
     key: String!
     url: String!
-    size: String!
   }
 
   input Search {
@@ -97,13 +95,24 @@ module.exports = gql`
     max: Int
   }
 
+  type PostPaginate {
+    docs: [Post!]
+    totalDocs: Int!
+    limit: Int!
+    totalPages: Int!
+    page: Int!
+    pagingCounter: Int!
+    hasPrevPage: Boolean!
+    hasNextPage: Boolean!
+  }
+
   type Query {
     users: [User!]
     getUser(userId: ID!): User
     getLoggedUser: User
 
     posts: [Post!]
-    searchPost(query: Search): [Post!]
+    searchPost(query: Search, page: Int!): PostPaginate!
     getPost(postId: ID!): Post
   }
 

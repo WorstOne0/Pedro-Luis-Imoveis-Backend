@@ -84,7 +84,7 @@ const PostSchema = new mongoose.Schema({
     },
     require: true,
   },
-  images: {
+  imagens: {
     type: [
       {
         name: String,
