@@ -148,6 +148,6 @@ module.exports = gql`
       thumbnail: ImageInput!
     ): Post
 
-    testUpload(file: Upload!): Boolean!
+    sendEmail(subject: String, email: String, text: String): Boolean
   }
 `;

@@ -1,13 +1,11 @@
 const { ApolloError, ValidationError } = require("apollo-server-express");
-const fetch = require("node-fetch");
 const bcrypt = require("bcrypt");
 const { OAuth2Client } = require("google-auth-library");
+const nodemailer = require("nodemailer");
 
 const { createToken } = require("../jwt");
 const User = require("../models/User");
 const Post = require("../models/Post");
-
-const fs = require("fs");
 
 module.exports = {
   Query: {
@@ -162,22 +160,30 @@ module.exports = {
       return true;
     },
 
-    testUpload: async (_, { file }, { req, res }) => {
-      const { createReadStream, mimetype, encoding, filename } = await file;
-      let path = "uploads/" + filename;
-      let stream = createReadStream();
-
-      return new Promise((resolve, reject) => {
-        stream
-          .pipe(fs.createWriteStream(path))
-          .on("finish", () => {
-            resolve(true);
-          })
-          .on("error", (err) => {
-            console.log("Error Event Emitted");
-            reject(false);
-          });
+    sendEmail: async (_, { subject, email, text }, { req, res }) => {
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_ACCOUNT,
+          pass: process.env.EMAIL_PASSWORD,
+        },
       });
+
+      try {
+        const info = await transporter.sendMail({
+          from: "sendEmailPedroLuis@gmail.com",
+          to: email,
+          subject: subject,
+          html: text,
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
   },
 
