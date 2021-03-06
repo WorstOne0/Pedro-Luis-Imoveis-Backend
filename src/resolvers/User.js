@@ -175,7 +175,7 @@ module.exports = {
       try {
         const info = await transporter.sendMail({
           from: "sendEmailPedroLuis@gmail.com",
-          to: email,
+          to: "luccagabriel12@hotmail.com",
           subject: subject,
           html: text,
         });

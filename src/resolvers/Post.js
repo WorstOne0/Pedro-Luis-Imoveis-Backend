@@ -48,8 +48,6 @@ module.exports = {
       }
     },
     getPost: (_, { postId }) => {
-      console.log(postId);
-
       return Post.findOne({ _id: postId });
     },
   },
