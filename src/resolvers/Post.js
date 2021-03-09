@@ -1,9 +1,12 @@
 const { ApolloError, ValidationError } = require("apollo-server-express");
-
 require("dotenv").config();
+
+const aws = require("aws-sdk");
 
 const User = require("../models/User");
 const Post = require("../models/Post");
+
+const s3 = new aws.S3();
 
 module.exports = {
   Query: {
@@ -87,6 +90,140 @@ module.exports = {
         });
 
         return await post.save();
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
+    updatePost: async (
+      _,
+      {
+        postId,
+        name,
+        type,
+        description,
+        price,
+        info,
+        infoAdd,
+        address,
+        imagens,
+        thumbnail,
+      },
+      { req }
+    ) => {
+      if (!req.userId) return null;
+
+      try {
+        const post = await Post.findByIdAndUpdate(
+          postId,
+          {
+            name,
+            type,
+            description,
+            price,
+            info,
+            infoAdd,
+            address,
+            imagens,
+            thumbnail,
+          },
+          {
+            new: true,
+          }
+        );
+
+        return post;
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
+
+    deletePost: async (_, { postId }, { req }) => {
+      if (!req.userId) return null;
+
+      try {
+        const post = await Post.findById(postId);
+
+        s3.deleteObject(
+          {
+            Bucket: "pedroluis",
+            Key: post.thumbnail.key,
+          },
+          (error, data) => {
+            if (error) throw new ApolloError(error);
+          }
+        );
+
+        post.imagens.map((img) => {
+          s3.deleteObject(
+            {
+              Bucket: "pedroluis",
+              Key: img.key,
+            },
+            (error, data) => {
+              if (error) throw new ApolloError(error);
+            }
+          );
+        });
+
+        post.remove();
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+
+      return true;
+    },
+
+    deleteImg: async (_, { postId, key }, { req }) => {
+      if (!req.userId) return null;
+
+      try {
+        const post = await Post.findById(postId);
+
+        post.imagens.map((img) => {
+          if (img.key !== key) return img;
+
+          s3.deleteObject(
+            {
+              Bucket: "pedroluis",
+              Key: img.key,
+            },
+            (error, data) => {
+              if (error) throw new ApolloError(error);
+            }
+          );
+        });
+
+        post.imagens = post.imagens.filter((img) => img.key !== key);
+
+        post.save();
+
+        return true;
+      } catch (error) {
+        throw new ApolloError(error);
+      }
+    },
+
+    deleteThumb: async (_, { postId, key }, { req }) => {
+      if (!req.userId) return null;
+
+      try {
+        const post = await Post.findById(postId);
+
+        s3.deleteObject(
+          {
+            Bucket: "pedroluis",
+            Key: post.thumbnail.key,
+          },
+          (error, data) => {
+            if (error) throw new ApolloError(error);
+          }
+        );
+
+        post.thumbnail = {};
+
+        post.save();
+
+        return true;
       } catch (error) {
         throw new ApolloError(error);
       }

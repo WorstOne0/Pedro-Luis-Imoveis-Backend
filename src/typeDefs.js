@@ -147,6 +147,22 @@ module.exports = gql`
       imagens: [ImageInput!]
       thumbnail: ImageInput!
     ): Post
+    updatePost(
+      postId: ID!
+      name: String!
+      type: String!
+      description: String
+      price: Int!
+      info: InfoInput!
+      infoAdd: [String!]
+      address: AddressInput!
+      imagens: [ImageInput!]
+      thumbnail: ImageInput!
+    ): Post
+    deletePost(postId: ID!): Boolean
+
+    deleteImg(postId: ID!, key: String!): Boolean
+    deleteThumb(postId: ID!, key: String!): Boolean
 
     sendEmail(subject: String, email: String, text: String): Boolean
   }
