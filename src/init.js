@@ -6,21 +6,28 @@ const bcrypt = require("bcrypt");
 const User = mongoose.model("User");
 
 module.exports = async function () {
-  const item = await User.findOne({
-    email: process.env.ADMIN_ACCOUNT,
-  }).catch((erro) => console.log(erro));
+  const users = process.env.ADMIN_ACCOUNT.split("-");
+  const passwords = process.env.ADMIN_PASSWORD.split("-");
+  const usernames = process.env.ADMIN_USERNAME.split("-");
+  const pictures = process.env.ADMIN_PICTURES.split(" ");
 
-  // Hash the Password
-  const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+  users.map(async (user, index) => {
+    const item = await User.findOne({ email: user }).catch((erro) =>
+      console.log(erro)
+    );
 
-  if (!item) {
-    await User.create({
-      email: process.env.ADMIN_ACCOUNT,
-      password: hashedPassword,
-      userName: process.env.ADMIN_USERNAME,
-      profilePicture: process.env.ADMIN_PICTURES,
-      role: "Admin",
-      thirdParty: "None",
-    });
-  }
+    // Hash the Password
+    const hashedPassword = await bcrypt.hash(passwords[index], 10);
+
+    if (!item) {
+      await User.create({
+        email: user,
+        password: hashedPassword,
+        userName: usernames[index],
+        profilePicture: pictures[index],
+        role: "Admin",
+        thirdParty: "None",
+      });
+    }
+  });
 };
