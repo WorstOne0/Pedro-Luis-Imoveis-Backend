@@ -29,7 +29,16 @@ const startServer = async () => {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: ["https://localhost:3000", "http://localhost:3000"],
+      origin: [
+        "https://localhost:3000",
+        "http://localhost:3000",
+        "https://master.dusbcq0i4znm6.amplifyapp.com",
+        "http://master.dusbcq0i4znm6.amplifyapp.com",
+        "http://pedroluisimoveis.com.br",
+        "http://www.pedroluisimoveis.com.br",
+        "https://pedroluisimoveis.com.br",
+        "https://www.pedroluisimoveis.com.br",
+      ],
       credentials: true,
     })
   );
