@@ -102,8 +102,14 @@ module.exports = {
           // Create Tokens
           const { accessToken, refreshToken } = createToken(user);
 
-          res.cookie("accessToken", accessToken, { httpOnly: true });
-          res.cookie("refreshToken", refreshToken, { httpOnly: true });
+          res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            sameSite: "none",
+          });
+          res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            sameSite: "none",
+          });
 
           return user;
         } catch (error) {
