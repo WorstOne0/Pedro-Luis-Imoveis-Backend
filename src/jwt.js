@@ -46,8 +46,14 @@ const setRefreshToken = async (req, res, next) => {
 
     const { accessToken, refreshToken } = createToken(user);
 
-    res.cookie("accessToken", accessToken, { httpOnly: true });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true });
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "none",
+    });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "none",
+    });
 
     req.userId = user._id;
 
