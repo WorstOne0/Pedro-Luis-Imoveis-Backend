@@ -183,7 +183,7 @@ module.exports = {
       try {
         const info = await transporter.sendMail({
           from: "sendEmailPedroLuis@gmail.com",
-          to: "luccagabriel12@hotmail.com",
+          to: "contato@pedroluisimoveis.com.br",
           subject: subject,
           html: text,
         });
