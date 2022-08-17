@@ -170,10 +170,12 @@ module.exports = {
 
     sendEmail: async (_, { subject, email, text }, { req, res }) => {
       const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        service: "gmail",
+        host: "smtp-mail.outlook.com",
+        secureConnection: false,
+        port: 587,
+        tls: {
+          ciphers: "SSLv3",
+        },
         auth: {
           user: process.env.EMAIL_ACCOUNT,
           pass: process.env.EMAIL_PASSWORD,
@@ -182,7 +184,7 @@ module.exports = {
 
       try {
         const info = await transporter.sendMail({
-          from: "sendEmailPedroLuis@gmail.com",
+          from: process.env.EMAIL_ACCOUNT,
           to: "contato@pedroluisimoveis.com.br",
           subject: subject,
           html: text,
