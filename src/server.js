@@ -11,6 +11,7 @@ const { setRefreshToken } = require("./jwt");
 
 require("dotenv").config();
 
+//
 const startServer = async () => {
   const server = new ApolloServer({
     typeDefs,
@@ -26,7 +27,7 @@ const startServer = async () => {
   require("./init.js")();
 
   const app = express();
-  
+
   app.use(cookieParser());
 
   app.use(
