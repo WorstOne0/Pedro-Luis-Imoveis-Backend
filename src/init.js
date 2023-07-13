@@ -16,7 +16,7 @@ module.exports = async function () {
       console.log(erro)
     );
 
-    // Hash the Password
+    //  Hash the Password
     const hashedPassword = await bcrypt.hash(passwords[index], 10);
 
     if (!item) {
